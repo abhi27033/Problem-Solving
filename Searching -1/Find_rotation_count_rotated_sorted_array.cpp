@@ -1,33 +1,45 @@
-class Solution {
-public:
-    int findKRotation(int arr[], int n) {
-        int low = 0;
-        int high = n - 1;
-        int ans = INT_MAX, idx = -1;
-        while (low <= high)
+#include <bits/stdc++.h>
+using namespace std;
+bool ispossible(int d, int c, vector<int>&st)
+{
+    int las = st[0], q = 0;
+    for (int i = 1; i < st.size(); i++)
+    {
+        if (st[i] - las >= d)
         {
-            int mid = low + (high - low) / 2;
-            // cout<<mid<<endl;
-            if (arr[low] <= arr[mid])
+            q++;
+            if (q == c)
+                return true;
+            las = st[i];
+        }
+    }
+    return false;
+}
+int main() {
+    // your code goes here
+    int t;
+    cin >> t;
+    while (t--)
+    {
+        int n, c, ans = 1;
+        cin >> n >> c;
+        vector<int>st(n);
+        for (int i = 0; i < n; i++)
+            cin >> st[i];
+        sort(st.begin(), st.end());
+        int l = 1, h = st[n - 1] - st[0];
+        while (l <= h)
+        {
+            int m = l + (h - l) / 2;
+            if (ispossible(m, c, st))
             {
-                if (ans > arr[low])
-                {
-                    ans = arr[low];
-                    idx = low;
-                }
-                low = mid + 1;
+                ans = m;
+                l = m + 1;
             }
             else
-            {
-                if (ans > arr[mid])
-                {
-                    ans = arr[mid];
-                    idx = mid;
-                }
-                high = mid - 1;
-            }
+                h = m - 1;
         }
-        return idx;
-
+        cout << ans << endl;
     }
-};
+    return 0;
+}

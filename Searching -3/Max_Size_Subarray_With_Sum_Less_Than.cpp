@@ -1,37 +1,21 @@
 #include <bits/stdc++.h>
 using namespace std;
-bool ispossible(int d, int s, vector<int>&st)
-{
-    for (int i = 0; i < st.size(); i += d)
-    {
-        int j = i;
-        int sum = 0;
-        while (j < st.size() && j < i + d)
-            sum += st[j++];
-        if (sum > s)
-            return false;
-    }
-    return true;
-}
 int main() {
     // your code goes here
-    int n, s;
-    cin >> n >> s;
-    vector<int> a(n);
-    for (int i = 0; i < n; i++)
-        cin >> a[i];
-    int l = 1, h = n, ans = -1;
-    while (l <= h)
+    int l = 0, r = INT_MAX, a, b, c, n;
+    cin >> a >> b >> c >> n;
+    while (l <= r)
     {
-        int m = l + (h - l) / 2;
-        if (ispossible(m, s, a))
-        {
-            ans = m;
+        int m = l + (r - l) / 2;
+        int n1 = m / a;
+        n1 += (m / b);
+        n1 += (m / c);
+        if (n1 == n)
+            return m;
+        if (n1 < n)
             l = m + 1;
-        }
         else
-            h = m - 1;
+            r = m - 1;
     }
-    cout << ans << endl;
     return 0;
 }

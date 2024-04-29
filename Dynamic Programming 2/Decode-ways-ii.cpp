@@ -42,7 +42,47 @@ public:
         return dp[i] = (pickdouble % mod + picksingle % mod) % mod;
     }
     int numDecodings(string s) {
-        for (int i = 0; i <= s.size(); i++) dp[i] = -1;
-        return solve(s, 0);
+        for (int i = 0; i <= s.size(); i++) dp[i] = 0;
+        int n = s.size();
+        dp[n] = 1;
+        for (int i = n - 1; i >= 0; i--)
+        {
+            if (s[i] == '0')continue;
+            long long pickdouble = 0, picksingle = 0;
+            if (i + 1 < n) {
+                if (s[i] == '*') {
+                    if (s[i + 1] == '*') {
+                        pickdouble = (15LL * dp[ i + 2] % mod) % mod;
+                    } else {
+                        int b = s[i + 1] - '0';
+                        if (b <= 6)
+                            pickdouble = (2LL * dp[ i + 2] % mod) % mod;
+                        else
+                            pickdouble = dp[i + 2] % mod;
+                    }
+                } else {
+                    int a = s[i] - '0';
+                    if (s[i + 1] == '*') {
+                        if (a <= 2) {
+                            if (a == 1)
+                                pickdouble = (9LL * dp[ i + 2] % mod) % mod;
+                            else
+                                pickdouble = (6LL * dp[ i + 2] % mod) % mod;
+                        }
+                    } else {
+                        int b = s[i + 1] - '0';
+                        a *= 10;
+                        a += b;
+                        if (a <= 26) pickdouble = dp[ i + 2] % mod;
+                    }
+                }
+            }
+            if (s[i] == '*')
+                picksingle = (9LL * dp[ i + 1]) % mod;
+            else
+                picksingle = dp[ i + 1] % mod;
+            dp[i] = (pickdouble % mod + picksingle % mod) % mod;
+        }
+        return dp[0];
     }
 };

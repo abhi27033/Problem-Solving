@@ -24,8 +24,25 @@ int main() {
 	for (int i = 0; i < n; i++)
 		cin >> ar[i];
 	cin >> x >> y >> z;
-	dp.resize(n, vector<int>(3, -100009));
-	cout << solve(ar, 0, 0, x, y, z) << endl;
+	dp.resize(n + 1, vector<int>(4, -100009));
+	for (int i = 0; i <= n; i++)
+		dp[i][3] = 0;
+	for (int i = n - 1; i >= 0; i--)
+	{
+		for (int xyz = 2; xyz >= 0; xyz--)
+		{
+			int pick = -100009, npick = -100009;
+			if (xyz == 0)
+				pick = ar[i] * x + dp[ i ][ xyz + 1];
+			if (xyz == 1)
+				pick = ar[i] * y + dp[ i ] [xyz + 1] ;
+			if (xyz == 2)
+				pick = ar[i] * z + dp[ i][ xyz + 1];
+			npick = dp[ i + 1][ xyz];
+			dp[i][xyz] = max(pick, npick);
+		}
+	}
+	cout << dp[0][0] << endl;
 	return 0;
 }
 
